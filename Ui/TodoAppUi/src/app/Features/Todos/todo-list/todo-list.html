@@ -1,10 +1,46 @@
-<h1>Todo List</h1>
+<h1 class="mt-3">Todo List</h1>
 <h4>Add a todo</h4>
 
-<form method="post" class="form-inline">
-    <input type="text" id="Description" name="Description" class="form-control" placeholder="Description" />
-    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add</button>
-</form>
+<div class="container">
+    <div class="mt-3">
+        <form [formGroup]="addTodoFormGroup" (ngSubmit)="onSubmit()">
+            <input type="text" formControlName="description" class="form-control" />
+            @if (descriptionFormControl.touched && descriptionFormControl.hasError('required')) {
+            <p class="text-danger small">This is a required field</p>
+            }
+            <button type="submit" [disabled]="addTodoFormGroup.valid === false" class="btn btn-primary text-nowrap"><i
+                    class="bi bi-plus-lg"></i> Add</button>
+        </form>
+    </div>
+
+    <div class="mt-3">
+        <h4>Current Todo's</h4>
+        @if (isLoading()) {
+        <p>Loading...</p>
+        } @else if (isError()) {
+        <p>Error: {{ isError() }}</p>
+        } @else if (value(); as todos) {
+        @if (todos.length === 0) {
+        <p>The current list is empty</p>
+        } @else {
+        <ul>
+            @for (todo of todos; track todo.id) {
+            <li>
+                <a class="btn btn-light" [routerLink]="['/Todos/edit', todo.id]">Edit</a>
+                {{ todo.description }}
+            </li>
+            }
+        </ul>
+        }
+        }
+
+    </div>
+
+
+</div>
+
+<!--
+
 <div asp-validation-summary="All"></div>
 <h4>Current Todo's</h4>
 
@@ -31,3 +67,4 @@ else
 }
 </ul>
 }
+-->

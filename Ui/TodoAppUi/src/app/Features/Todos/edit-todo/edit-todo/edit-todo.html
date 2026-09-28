@@ -1,0 +1,30 @@
+<div class="container">
+    <h1 class="mt-3">Edit Todo</h1>
+
+    <form [formGroup]="editTodoFormGroup" (ngSubmit)="onSubmit()">
+        <div class="mt-3">
+            <div class="mt-3">
+                <label class="form-label">Id</label>
+                <input type="text" class="form-control" disabled [value]="id()" />
+            </div>
+
+            <div class="mt-3">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control" formControlName="description" />
+                @if (descriptionFormControl.touched && descriptionFormControl.hasError('required')) {
+                <p class="text-danger small">This is a required field</p>
+                } @if (descriptionFormControl.touched && descriptionFormControl.hasError('maxlength')) {
+                <p class="text-danger small">Todo description can only be 500 characters long</p>
+                }
+            </div>
+
+            <div class="mt-3 d-flex gap-4">
+                <button type="submit" class="btn btn-primary" [disabled]="editTodoFormGroup.valid === false">
+                    Save
+                </button>
+
+                <button type="button" class="btn btn-danger" (click)="deleteTodo()">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

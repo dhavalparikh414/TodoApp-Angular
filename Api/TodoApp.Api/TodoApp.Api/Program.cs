@@ -30,6 +30,10 @@ namespace TodoApp.Api
 
             app.UseHttpsRedirection();
 
+            app.UseCors(options => options.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin());
+
             app.UseAuthorization();
 
 

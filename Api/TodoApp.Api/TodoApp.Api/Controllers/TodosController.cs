@@ -23,6 +23,18 @@ namespace TodoApp.Api.Controllers
             var todos = await _context.Todos.ToListAsync();
             return Ok(todos);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTodoById(Guid id)
+        {
+            var todo = await _context.Todos.FindAsync(id);
+            if (todo == null)
+            {
+                return NotFound();
+            }
+            return Ok(todo);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateTodoAsync([FromBody] TodoRequestDto todo)
         {
@@ -53,14 +65,14 @@ namespace TodoApp.Api.Controllers
             return CreatedAtAction(nameof(GetTodos), new { id = todoResponseDto.Id }, todoResponseDto);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateTodoAsync([FromBody] Todo todo)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateTodoAsync(Guid id, [FromBody] TodoRequestDto todo)
         {
             if (todo == null || string.IsNullOrWhiteSpace(todo.Description))
             {
                 return BadRequest("Todo description cannot be empty.");
             }
-            var existingTodo = await _context.Todos.FindAsync(todo.Id);
+            var existingTodo = await _context.Todos.FindAsync(id);
             if (existingTodo == null)
             {
                 return NotFound();
